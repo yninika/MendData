@@ -4,7 +4,7 @@
 
 MendData helps students and beginner analysts clean tabular data without guessing. It finds the problems in a DataFrame, fixes each one with a strategy you choose, scores the quality before and after, and explains every change in plain English.
 
-> **Status: Phase 2 (core OOP development) is in progress.** The `Issue` class and the package setup are done. The detectors, fixers, scorer, audit log, and session are being built on feature branches. The API shown below follows the team's design contract and may still change. MendData is not on PyPI yet.
+> **Status: Phase 2 (core OOP development) is in progress.** The `Issue` class and the package exports (`__init__.py`) are done. The detectors, fixers, scorer, audit log, and session are being built on feature branches. The API shown below follows the team's design contract and may still change. MendData is not on PyPI yet.
 
 ## Why MendData?
 
@@ -40,9 +40,11 @@ pip install menddata
 ```bash
 git clone https://github.com/yninika/MendData.git
 cd MendData
-pip install -r requirements.txt
-pip install -e .   # works once setup.py is added in Phase 4
+pip install pandas numpy
+# Once setup.py and requirements.txt are added (Phase 4): pip install -e .
 ```
+
+Until the package is installable, run Python from the repository root so `import MendData` works.
 
 PyPI package names are not case-sensitive, so the package installs as `menddata` and is imported as `MendData`.
 
@@ -215,15 +217,15 @@ Diagram key: `+` public, `#` protected (one leading underscore in Python), `*` a
 
 ## Class reference
 
-This is the planned API from the team contract. Every class and method has a docstring.
+This is the planned API from the team contract (Section 5 of Narrative Report 1). Every class and method must have a Google-style docstring.
 
 | Class | Module | Key members |
 |---|---|---|
 | `Issue` | `issue.py` | `Issue(column, kind, count, severity, details=None)`. Read-only properties `column`, `kind`, `count`, `severity`, `details`. `describe()`. |
-| `BaseDetector` | `detectors.py` | Abstract. Property `min_severity`. Abstract `detect(data) -> list[Issue]`. |
-| `MissingValueDetector` | `detectors.py` | One issue per column that has missing values. |
-| `DuplicateDetector(subset=None)` | `detectors.py` | One row-level issue for repeated rows. |
-| `OutlierDetector(method='iqr', threshold=None)` | `detectors.py` | One issue per numeric column with outliers (IQR or z-score). |
+| `BaseDetector(min_severity=0.0)` | `detectors.py` | Abstract. Property `min_severity`. Abstract `detect(data) -> list[Issue]`. |
+| `MissingValueDetector(min_severity=0.0)` | `detectors.py` | One issue per column that has missing values. |
+| `DuplicateDetector(subset=None, min_severity=0.0)` | `detectors.py` | One row-level issue for repeated rows. |
+| `OutlierDetector(method='iqr', threshold=None, min_severity=0.0)` | `detectors.py` | One issue per numeric column with outliers (IQR or z-score). |
 | `BaseFixer(strategy)` | `fixers.py` | Abstract. `HANDLES`, `strategy`, `can_fix(issue)`, abstract `fix(data, issue)` and `explain(issue)`. |
 | `ImputeFixer(strategy='median')` | `fixers.py` | Fills missing values with the mean, median, or mode. |
 | `DropFixer()` | `fixers.py` | Drops duplicate rows, or rows with a missing value. |
@@ -300,7 +302,7 @@ MendData/                    (repository root)
 ## Roadmap
 
 - [x] **Phase 1: Ideation and planning.** Concept, five features, class design, repository, roles.
-- [x] **Phase 2: Core OOP development.** Main classes and methods, with docstrings. *(in progress)*
+- [ ] **Phase 2: Core OOP development.** Main classes and methods, with docstrings. *(in progress)*
 - [ ] **Phase 3: Functional implementation.** Complete modules, unit tests, and the demo notebook.
 - [ ] **Phase 4: Documentation and collaboration.** Final README, setup files, LICENSE, and code cleanup.
 - [ ] **Phase 5: Publishing and presentation.** Publish to PyPI, verify `pip install`, and present.
