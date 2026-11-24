@@ -300,7 +300,7 @@ MendData/                    (repository root)
 ## Roadmap
 
 - [x] **Phase 1: Ideation and planning.** Concept, five features, class design, repository, roles.
-- [ ] **Phase 2: Core OOP development.** Main classes and methods, with docstrings. *(in progress)*
+- [x] **Phase 2: Core OOP development.** Main classes and methods, with docstrings. *(in progress)*
 - [ ] **Phase 3: Functional implementation.** Complete modules, unit tests, and the demo notebook.
 - [ ] **Phase 4: Documentation and collaboration.** Final README, setup files, LICENSE, and code cleanup.
 - [ ] **Phase 5: Publishing and presentation.** Publish to PyPI, verify `pip install`, and present.
