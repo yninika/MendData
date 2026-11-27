@@ -181,7 +181,7 @@ class TestOutlierDetector:
 
     def test_zscore_method_and_default_threshold(self) -> None:
         """Z-score method defaults to threshold 3.0 and flags extreme values."""
-        df = pd.DataFrame({"score": [50.0, 51.0, 49.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 500.0]})
+        df = pd.DataFrame({"score": [50.0] * 25 + [500.0]})
         detector = OutlierDetector(method="zscore")
         assert detector.method == "zscore"
         assert detector.threshold == 3.0
