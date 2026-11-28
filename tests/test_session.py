@@ -1,4 +1,3 @@
-
 """Unit tests for CleaningSession.
 
 Most tests use small fake collaborators (detector, fixer, scorer, log) that
@@ -16,9 +15,7 @@ from MendData.issue import Issue
 from MendData.session import CleaningSession
 
 
-# ----------------------------------------------------------------------
-# Fakes that follow the contract
-# ----------------------------------------------------------------------
+
 class FakeDetector:
     """Returns the issues it was given."""
 
@@ -77,9 +74,7 @@ class FakeLog:
         return len(self.entries)
 
 
-# ----------------------------------------------------------------------
-# Test data and helpers
-# ----------------------------------------------------------------------
+
 def make_df():
     return pd.DataFrame(
         {"age": [20.0, None, 30.0, 400.0, None], "name": list("abcde")}
@@ -129,9 +124,7 @@ def make_session(*issues, df=None, calls=None, log=None, **kwargs):
     )
 
 
-# ----------------------------------------------------------------------
-# Construction and encapsulation
-# ----------------------------------------------------------------------
+
 def test_session_never_changes_the_dataframe_it_is_given():
     df = make_df()
     original = df.copy()
@@ -183,9 +176,7 @@ def test_an_empty_injected_log_is_used_not_replaced():
     assert len(log) == 1
 
 
-# ----------------------------------------------------------------------
-# scan
-# ----------------------------------------------------------------------
+
 def test_scan_ranks_issues_worst_first_and_logs_one_entry():
     log = FakeLog()
     session = make_session(DUPLICATE, MISSING, OUTLIER, log=log)
@@ -205,9 +196,7 @@ def test_scan_rejects_a_detector_that_returns_non_issues():
         session.scan()
 
 
-# ----------------------------------------------------------------------
-# fix and fix_all
-# ----------------------------------------------------------------------
+
 def test_fix_applies_the_default_fixer_and_logs_the_step():
     log = FakeLog()
     session = make_session(MISSING, log=log)
@@ -298,9 +287,7 @@ def test_a_fixer_that_returns_a_non_dataframe_is_rejected():
         session.fix(MISSING, bad)
 
 
-# ----------------------------------------------------------------------
-# undo, reset, history
-# ----------------------------------------------------------------------
+
 def test_undo_restores_data_reopens_the_issue_and_logs_it():
     log = FakeLog()
     session = make_session(MISSING, OUTLIER, log=log)
@@ -368,9 +355,7 @@ def test_reset_returns_to_the_original_and_clears_state():
         session.undo()
 
 
-# ----------------------------------------------------------------------
-# score, report, repr
-# ----------------------------------------------------------------------
+
 def test_score_compares_the_original_with_the_current_data():
     session = make_session(MISSING)
     assert session.score() == {"before": 80, "after": 80, "change": 0}
@@ -401,9 +386,7 @@ def test_repr_summarises_the_session():
     assert repr(session) == "CleaningSession(rows=5, columns=2, issues=1, steps=1)"
 
 
-# ----------------------------------------------------------------------
-# Integration: runs only when the real modules exist
-# ----------------------------------------------------------------------
+
 def test_default_collaborators_work_together():
     for module in ("detectors", "fixers", "scoring", "audit"):
         pytest.importorskip(f"MendData.{module}")
@@ -419,3 +402,5 @@ def test_default_collaborators_work_together():
     scores = session.score()
     assert scores["after"] >= scores["before"]
     assert isinstance(session.report(), str)
+
+    
