@@ -73,10 +73,6 @@ def _default_log() -> Any:
 
     return AuditLog()
 
-
-# ----------------------------------------------------------------------
-# Small private helpers
-# ----------------------------------------------------------------------
 def _plural(count: int, word: str) -> str:
     """Return ``word`` with an ``s`` added unless ``count`` is exactly 1.
 
@@ -255,9 +251,7 @@ class CleaningSession:
         self._scorer = scorer
         self._log = log
 
-    # ------------------------------------------------------------------
-    # Read-only properties (encapsulation)
-    # ------------------------------------------------------------------
+
     @property
     def data(self) -> pd.DataFrame:
         """A copy of the current data, so callers cannot change the session."""
@@ -268,9 +262,8 @@ class CleaningSession:
         """The issues found by the last scan that are still open (a copy)."""
         return [] if self._issues is None else list(self._issues)
 
-    # ------------------------------------------------------------------
-    # The main workflow
-    # ------------------------------------------------------------------
+
+    
     def scan(self) -> List[Issue]:
         """Run every detector and rank the issues, worst first.
 
@@ -413,9 +406,7 @@ class CleaningSession:
             lines.append(self._log.export())
         return "\n".join(lines)
 
-    # ------------------------------------------------------------------
-    # Undo and reset
-    # ------------------------------------------------------------------
+
     def undo(self) -> pd.DataFrame:
         """Revert the last cleaning step (one fixer applied to one issue).
 
@@ -465,9 +456,7 @@ class CleaningSession:
         )
         return self.data
 
-    # ------------------------------------------------------------------
-    # Internals
-    # ------------------------------------------------------------------
+
     def _apply(self, issue: Issue, fixer: Any) -> None:
         """Run one fixer on one issue and record the step.
 
@@ -502,9 +491,7 @@ class CleaningSession:
         self._data = result
         self._log.record(step=step, reason=issue.describe(), affected=affected)
 
-    # ------------------------------------------------------------------
-    # Dunder methods
-    # ------------------------------------------------------------------
+   
     def __repr__(self) -> str:
         """Return a short summary of the session.
 
